@@ -184,10 +184,10 @@ def handle_message(event):
         if twh<12:
             greet='早安!'
         elif twh<18:
-            greet='午安'
+            greet='午安!'
         else:
-            greet='晚安'
-        casttext = name+'對大家說：大家'+greet+',現在時間(HR):'+str(twh)
+            greet='晚安!'
+        casttext = name+'對大家說：大家'+greet
         remessage = TextSendMessage(text=casttext)
         userids = mongodb.get_all_userid('users')
         msgs = StickerSendMessage(
