@@ -178,8 +178,10 @@ def handle_message(event):
     if message == '打招呼':
         now=datetime.now()
         greet=''
-        twh=int(now.hour)+8
-        if twh<12 | twh>24:
+        twh=int(now.hour+8)
+        if twh>24:
+            twh=twh-24
+        if twh<12:
             greet='早安!'
         elif twh<18:
             greet='午安'
