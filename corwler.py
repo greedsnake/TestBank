@@ -67,8 +67,8 @@ def google():
     soup = json.loads(text)
     
     # 抓第一篇
-    comn=random.randint(1,10)
-    first = soup[0][comp]
+    comn=random.randint(0,9)
+    first = soup[0][comn]
     # 整理資料 
     username = first[0][1]
     time = first[1]
