@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 import re
 import json
 import feedparser
-
+import random
 
 def udn_news():
     '''
@@ -60,8 +60,8 @@ def google():
     pretext = ')]}\''
     
     # 爬下com
-    
-    url = 'https://www.google.com.tw/maps/preview/reviews?authuser=0&hl=zh-TW&gl=tw&pb=!1s0x34681df7efe320bd%3A0x29c884466965864f!2i10!3i10!4e3!7m4!2b1!3b1!5b1!6b1'
+    comp=random.randint(1,10)
+    url = 'https://www.google.com.tw/maps/preview/reviews?authuser=0&hl=zh-TW&gl=tw&pb=!1s0x34681df7efe320bd%3A0x29c884466965864f!2i'+str(comp)+'0!3i10!4e3!7m4!2b1!3b1!5b1!6b1'
     resp = requests.get(url)
     text = resp.text.replace(pretext,'')
     soup = json.loads(text)

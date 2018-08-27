@@ -145,13 +145,16 @@ def handle_message(event):
    
     if message == 'googlemap':
         # 取得最新評價
-        text = corwler.google()
-        # 包裝訊息
-        remessage = TextSendMessage(text=text)
-        # 回應使用者
-        line_bot_api.reply_message(
-                        event.reply_token,
-                        remessage)
+        rep=1
+        while rep<=3:
+          text = corwler.google()
+          # 包裝訊息
+          remessage = TextSendMessage(text=text)
+          # 回應使用者
+          line_bot_api.reply_message(
+                          event.reply_token,
+                          remessage)
+          rep=rep+1
         return 0 
     
         
@@ -173,7 +176,7 @@ def handle_message(event):
         return 0 
     
     if message == '打招呼':
-        casttext = '大家早阿!!'
+        casttext = name+'對大家說：大家早阿!!'
         remessage = TextSendMessage(text=casttext)
         userids = mongodb.get_all_userid('users')
         msgs = StickerSendMessage(
