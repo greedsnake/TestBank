@@ -6,7 +6,7 @@ Created on Fri Aug 24 18:12:45 2018
 """
 
 from linebot.models import *
-
+from datetime import datetime 
 import feedparser
 import random
 # line-bot
@@ -176,7 +176,15 @@ def handle_message(event):
         return 0 
     
     if message == '打招呼':
-        casttext = name+'對大家說：大家早阿!!'
+        now=datetime.now()
+        greet=''
+        if now.hour<12:
+            greet='早安!'
+        elif now.hour<18:
+            greet='午安'
+        else:
+            greet='晚安'
+        casttext = name+'對大家說：大家'+greet
         remessage = TextSendMessage(text=casttext)
         userids = mongodb.get_all_userid('users')
         msgs = StickerSendMessage(
