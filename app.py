@@ -161,12 +161,10 @@ def handle_message(event):
                       event.reply_token,
                       remessage)
       
-    def postscore():
+    def postscore(message):
       mongodb.update_byid(uid,{'ready':0},'users')
       message=int(message)
-      score(message)
-      
-    def score(message):
+      #score(message)
       text = corwler.google(message)
       # 包裝訊息
       remessage = TextSendMessage(text=text)
@@ -174,7 +172,9 @@ def handle_message(event):
       line_bot_api.reply_message(
                       event.reply_token,
                       remessage)           
-            
+      
+    #def score(message):
+                  
     if re.search('新聞|news', event.message.text, re.IGNORECASE):
         news()  
         return 0 
@@ -192,7 +192,7 @@ def handle_message(event):
         return 0 
     
     if mongodb.get_ready(uid,'users') ==1 :
-        postscore()
+        postscore(message)
         return 0 
     
     if re.search('Hi|hello|你好|ha', message, re.IGNORECASE):
