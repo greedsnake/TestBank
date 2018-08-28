@@ -164,6 +164,9 @@ def handle_message(event):
     def postscore():
       mongodb.update_byid(uid,{'ready':0},'users')
       message=int(message)
+      score(message)
+      
+    def score(message):
       text = corwler.google(message)
       # 包裝訊息
       remessage = TextSendMessage(text=text)
