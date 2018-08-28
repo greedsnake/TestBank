@@ -147,22 +147,28 @@ def handle_message(event):
                   )           
       line_bot_api.reply_message(event.reply_token, remessage)
       
-    def score():
-      text = corwler.google()
+    def score(n):
+      text = corwler.google(n)
       # 包裝訊息
       remessage = TextSendMessage(text=text)
       # 回應使用者
       line_bot_api.reply_message(
                       event.reply_token,
-                      remessage) 
-        
-      
+                      remessage)              
     
     def dcard():
       text = corwler.Dcard()
       line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=text))
+      
+    def choosebank():
+      # 設定使用者下一句話要群廣播
+      mongodb.update_byid(uid,{'ready':1},'users')
+      remessage = TextSendMessage(text='請選擇銀行編號(120,142?')
+      line_bot_api.reply_message(
+                      event.reply_token,
+                      remessage)
       
     if re.search('新聞|news', event.message.text, re.IGNORECASE):
         news()  
@@ -172,9 +178,9 @@ def handle_message(event):
         dcard()
         return 0 
                
-    if message == '評價':
-        score()
-        return 0 
+#    if message == '評價':      
+#        score()
+#        return 0 
     
     if message == '打招呼':
         hello()
@@ -182,19 +188,15 @@ def handle_message(event):
         
     if mongodb.get_ready(uid,'users') ==1 :
         mongodb.update_byid(uid,{'ready':0},'users')
-        casttext = name+' 對大家說： '+message
-        remessage = TextSendMessage(text=casttext)
-        userids = mongodb.get_all_userid('users')
-        line_bot_api.multicast(userids, remessage)
+        score(message)
+        #casttext = name+' 對大家說： '+message
+        #remessage = TextSendMessage(text=casttext)
+        #userids = mongodb.get_all_userid('users')
+        #line_bot_api.multicast(userids, remessage)
         return 0 
     
-    if message == '群體廣播':
-        # 設定使用者下一句話要群廣播
-        mongodb.update_byid(uid,{'ready':1},'users')
-        remessage = TextSendMessage(text='請問要廣播什麼呢?')
-        line_bot_api.reply_message(
-                        event.reply_token,
-                        remessage)
+    if message == '評價':
+        choosebank()
         return 0 
     
 
