@@ -188,6 +188,7 @@ def handle_message(event):
         
     if mongodb.get_ready(uid,'users') ==1 :
         mongodb.update_byid(uid,{'ready':0},'users')
+        message=int(message)
         score(message)
         #casttext = name+' 對大家說： '+message
         #remessage = TextSendMessage(text=casttext)
