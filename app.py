@@ -107,8 +107,10 @@ def handle_message(event):
           twh=twh-24
       if twh<12:
           greet='早安!'
-      elif twh<18:
+      elif twh<14:
           greet='午安!'
+      elif twh<18:
+          greet='下午好!'
       else:
           greet='晚安!'
       casttext = name+'對大家說：大家'+greet
@@ -120,65 +122,64 @@ def handle_message(event):
           sticker_id='2'
           )
       line_bot_api.multicast(userids, remessage)
-      line_bot_api.multicast(userids, msgs)   
+      line_bot_api.multicast(userids, msgs)
+      
+    def news():
+      dic = corwler.udn_news()
+      
+    def score():
+      text = corwler.google()
+      # 包裝訊息
+      remessage = TextSendMessage(text=text)
+      # 回應使用者
+      line_bot_api.reply_message(
+                      event.reply_token,
+                      remessage) 
+        
+      columns = []
+      for i in range(0,3):
+          carousel = CarouselColumn(
+                      thumbnail_image_url = dic[i]['img'],
+                      title = dic[i]['title'],
+                      text = dic[i]['summary'],
+                      actions=[
+                          URITemplateAction(
+                              label = '點我看新聞',
+                              uri = dic[i]['link']
+                            )
+                          ]
+                      )
+          columns.append(carousel)
+        
+      remessage = TemplateSendMessage(
+                  alt_text='Carousel template',
+                  template=CarouselTemplate(columns=columns)
+                  )
+        
+        
+      line_bot_api.reply_message(event.reply_token, remessage)
     
-    if re.search('Hi|hello|你好|ha', message, re.IGNORECASE):
-        line_bot_api.reply_message(
+    def dcard():
+      text = corwler.Dcard()
+      line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=event.message.text))
-        
-        return 0 
-    
-
+        TextSendMessage(text=text))
+      
     if re.search('新聞|news', event.message.text, re.IGNORECASE):
-        dic = corwler.udn_news()
-        
-        columns = []
-        for i in range(0,3):
-            carousel = CarouselColumn(
-                        thumbnail_image_url = dic[i]['img'],
-                        title = dic[i]['title'],
-                        text = dic[i]['summary'],
-                        actions=[
-                            URITemplateAction(
-                                label = '點我看新聞',
-                                uri = dic[i]['link']
-                              )
-                            ]
-                        )
-            columns.append(carousel)
-        
-        remessage = TemplateSendMessage(
-                    alt_text='Carousel template',
-                    template=CarouselTemplate(columns=columns)
-                    )
-        
-        
-        line_bot_api.reply_message(event.reply_token, remessage)
+        news()  
         return 0 
         
     if re.search('Dcard|dcard', event.message.text, re.IGNORECASE):
-        text = corwler.Dcard()
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=text))
+        dcard()
+        return 0 
+               
+    if message == '評價':
+        score()
         return 0 
     
-   
-    if message == 'googlemap':
-        # 取得最新評價
-        rep=1
-        while rep<=3:
-          text = corwler.google()
-          # 包裝訊息
-          remessage = TextSendMessage(text=text)
-          # 回應使用者
-          line_bot_api.reply_message(
-                          event.reply_token,
-                          remessage)
-          rep=rep+1
+    if message == '打招呼':
+        hello()
         return 0 
-    
         
     if mongodb.get_ready(uid,'users') ==1 :
         mongodb.update_byid(uid,{'ready':0},'users')
@@ -197,10 +198,14 @@ def handle_message(event):
                         remessage)
         return 0 
     
-    if message == '打招呼':
-        hello()
-        return 0 
+
     
+    if re.search('Hi|hello|你好|ha', message, re.IGNORECASE):
+        line_bot_api.reply_message(
+        event.reply_token,
+        TextSendMessage(text=event.message.text))
+        
+        return 0 
     
     line_bot_api.reply_message(
         event.reply_token,
