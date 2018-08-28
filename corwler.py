@@ -53,7 +53,7 @@ def udn_news():
     return cards
 
 
-def google(n):
+def google(message):
     '''
     抓到最新google map資料
     '''
@@ -64,8 +64,7 @@ def google(n):
         'https://www.google.com.tw/maps/preview/reviews?authuser=0&hl=zh-TW&gl=tw&pb=!1s0x3442acbde079d169%3A0x8810bd0a963d1727!2i0!3i10!4e3!7m4!2b1!3b1!5b1!6b1']
 	 
     bn=[120,142]
-	
-    i=bn.index(n)
+    i=bn.index(message)
     resp = requests.get(url[i])
     text = resp.text.replace(pretext,'')
     soup = json.loads(text)

@@ -147,8 +147,8 @@ def handle_message(event):
                   )           
       line_bot_api.reply_message(event.reply_token, remessage)
       
-    def score(n):
-      text = corwler.google(n)
+    def score(message):
+      text = corwler.google(message)
       # 包裝訊息
       remessage = TextSendMessage(text=text)
       # 回應使用者
@@ -165,7 +165,7 @@ def handle_message(event):
     def choosebank():
       # 設定使用者下一句話要群廣播
       mongodb.update_byid(uid,{'ready':1},'users')
-      remessage = TextSendMessage(text='請選擇銀行編號(120,142?')
+      remessage = TextSendMessage(text='請選擇銀行編號(120,142)?')
       line_bot_api.reply_message(
                       event.reply_token,
                       remessage)
