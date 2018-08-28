@@ -126,16 +126,6 @@ def handle_message(event):
       
     def news():
       dic = corwler.udn_news()
-      
-    def score():
-      text = corwler.google()
-      # 包裝訊息
-      remessage = TextSendMessage(text=text)
-      # 回應使用者
-      line_bot_api.reply_message(
-                      event.reply_token,
-                      remessage) 
-        
       columns = []
       for i in range(0,3):
           carousel = CarouselColumn(
@@ -154,10 +144,19 @@ def handle_message(event):
       remessage = TemplateSendMessage(
                   alt_text='Carousel template',
                   template=CarouselTemplate(columns=columns)
-                  )
-        
-        
+                  )           
       line_bot_api.reply_message(event.reply_token, remessage)
+      
+    def score():
+      text = corwler.google()
+      # 包裝訊息
+      remessage = TextSendMessage(text=text)
+      # 回應使用者
+      line_bot_api.reply_message(
+                      event.reply_token,
+                      remessage) 
+        
+      
     
     def dcard():
       text = corwler.Dcard()
