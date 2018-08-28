@@ -122,7 +122,7 @@ def handle_message(event):
           sticker_id='2'
           )
       line_bot_api.multicast(userids, remessage)
-      line_bot_api.multicast(userids, msgs)
+      line_bot_api.multicast(userids, msgs)      
       
     def news():
       dic = corwler.udn_news()
@@ -139,22 +139,13 @@ def handle_message(event):
                             )
                           ]
                       )
-          columns.append(carousel)
-        
+          columns.append(carousel)        
       remessage = TemplateSendMessage(
                   alt_text='Carousel template',
                   template=CarouselTemplate(columns=columns)
                   )           
-      line_bot_api.reply_message(event.reply_token, remessage)
+      line_bot_api.reply_message(event.reply_token, remessage)      
       
-    def score(message):
-      text = corwler.google(message)
-      # 包裝訊息
-      remessage = TextSendMessage(text=text)
-      # 回應使用者
-      line_bot_api.reply_message(
-                      event.reply_token,
-                      remessage)              
     
     def dcard():
       text = corwler.Dcard()
@@ -170,43 +161,41 @@ def handle_message(event):
                       event.reply_token,
                       remessage)
       
+    def postscore():
+      mongodb.update_byid(uid,{'ready':0},'users')
+      message=int(message)
+      text = corwler.google(message)
+      # 包裝訊息
+      remessage = TextSendMessage(text=text)
+      # 回應使用者
+      line_bot_api.reply_message(
+                      event.reply_token,
+                      remessage)           
+            
     if re.search('新聞|news', event.message.text, re.IGNORECASE):
         news()  
         return 0 
         
     if re.search('Dcard|dcard', event.message.text, re.IGNORECASE):
         dcard()
-        return 0 
-               
-#    if message == '評價':      
-#        score()
-#        return 0 
+        return 0
     
     if message == '打招呼':
         hello()
-        return 0 
-        
-    if mongodb.get_ready(uid,'users') ==1 :
-        mongodb.update_byid(uid,{'ready':0},'users')
-        message=int(message)
-        score(message)
-        #casttext = name+' 對大家說： '+message
-        #remessage = TextSendMessage(text=casttext)
-        #userids = mongodb.get_all_userid('users')
-        #line_bot_api.multicast(userids, remessage)
-        return 0 
+        return 0         
     
     if message == '評價':
         choosebank()
         return 0 
     
-
+    if mongodb.get_ready(uid,'users') ==1 :
+        postscore()
+        return 0 
     
     if re.search('Hi|hello|你好|ha', message, re.IGNORECASE):
         line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=event.message.text))
-        
+        TextSendMessage(text=event.message.text))        
         return 0 
     
     line_bot_api.reply_message(
