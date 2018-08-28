@@ -63,7 +63,6 @@ def google(message):
     url=['https://www.google.com.tw/maps/preview/reviews?authuser=0&hl=zh-TW&gl=tw&pb=!1s0x3442ab5ed8270bf5%3A0xca5639af83a88adc!2i0!3i10!4e3!7m4!2b1!3b1!5b1!6b1',
         'https://www.google.com.tw/maps/preview/reviews?authuser=0&hl=zh-TW&gl=tw&pb=!1s0x3442acbde079d169%3A0x8810bd0a963d1727!2i0!3i10!4e3!7m4!2b1!3b1!5b1!6b1']
 	 
-    message=int(message)
     bn=[120,142]
     i=bn.index(message)
     resp = requests.get(url[i])
