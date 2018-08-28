@@ -39,8 +39,8 @@ import corwler
 
 app = Flask(__name__)
 
-line_bot_api = LineBotApi('l4pC2u/3DFbFW3pC0BE8huyEqMgaIZjlc0NzmqgLmm5+KXfRJLyjHIBwPPH5ize3LxjSKrbAUMi2hJEtJKKcRBdLg/MB6k/0g0n/dzZB+JImR7h8O1GRQaq3/JUNQaqxGhjTSWc0AnFsdIDIbcQ5LQdB04t89/1O/w1cDnyilFU=')
-handler = WebhookHandler('f44868616b14237cf0bd486d8e591e8e')
+line_bot_api = LineBotApi('yEqg1Y7Or2bgOoMJp7w193y55LcpmQABBVWdTu7hc+LLjvyyDFc8V1ElBVhENacvpXrUyVtgjmOo5gI6Jfx4dNyO2UTXXTVMOvHXp278lNEER1H508PKsvvJxCkEZ6aqhah5DefxDxYt1wO6nZKqnwdB04t89/1O/w1cDnyilFU=')
+handler = WebhookHandler('472a6a5de9a2d121af72f61a8b93136a')
 
 
 
@@ -86,7 +86,7 @@ def handle_follow(event):
                'ready':0}
         
         mongodb.insert_one(dic,'users')
-   
+
 
 
 @handler.add(MessageEvent, message=TextMessage)
@@ -99,6 +99,28 @@ def handle_message(event):
     uid = profile.user_id
     message = event.message.text
 
+    def hello():
+      now=datetime.now()
+      greet=''
+      twh=int(now.hour+8)
+      if twh>24:
+          twh=twh-24
+      if twh<12:
+          greet='早安!'
+      elif twh<18:
+          greet='午安!'
+      else:
+          greet='晚安!'
+      casttext = name+'對大家說：大家'+greet
+      remessage = TextSendMessage(text=casttext)
+      userids = mongodb.get_all_userid('users')
+      msgs = StickerSendMessage(
+          package_id='1',
+          #sticker_id=random.randint(1,15)
+          sticker_id='2'
+          )
+      line_bot_api.multicast(userids, remessage)
+      line_bot_api.multicast(userids, msgs)   
     
     if re.search('Hi|hello|你好|ha', message, re.IGNORECASE):
         line_bot_api.reply_message(
@@ -176,27 +198,7 @@ def handle_message(event):
         return 0 
     
     if message == '打招呼':
-        now=datetime.now()
-        greet=''
-        twh=int(now.hour+8)
-        if twh>24:
-            twh=twh-24
-        if twh<12:
-            greet='早安!'
-        elif twh<18:
-            greet='午安!'
-        else:
-            greet='晚安!'
-        casttext = name+'對大家說：大家'+greet
-        remessage = TextSendMessage(text=casttext)
-        userids = mongodb.get_all_userid('users')
-        msgs = StickerSendMessage(
-            package_id='1',
-            #sticker_id=random.randint(1,15)
-            sticker_id='2'
-        )
-        line_bot_api.multicast(userids, remessage)
-        line_bot_api.multicast(userids, msgs)
+        hello()
         return 0 
     
     
