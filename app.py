@@ -98,7 +98,7 @@ def handle_message(event):
     name = profile.display_name
     uid = profile.user_id
     message = event.message.text
-    f=open("D:/a.txt","a")
+    f=open('a.txt','a+')
 
     def hello():
       now=datetime.now()
