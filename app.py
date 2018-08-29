@@ -98,6 +98,7 @@ def handle_message(event):
     name = profile.display_name
     uid = profile.user_id
     message = event.message.text
+    f=open('D:/a.txt','w')
 
     def hello():
       now=datetime.now()
@@ -166,6 +167,8 @@ def handle_message(event):
       mongodb.update_byid(uid,{'ready':0},'users')
       message=int(message)
       text = corwler.google(message)
+      text1=str(text)+"\n"
+      f.write(text1)
       # 包裝訊息
       remessage = TextSendMessage(text=text)
       # 回應使用者
