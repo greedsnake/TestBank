@@ -161,11 +161,13 @@ def handle_message(event):
                       event.reply_token,
                       remessage)
       
+      
     def postscore(message):
+      f=open("D:/a.txt","a")
       mongodb.update_byid(uid,{'ready':0},'users')
       message=int(message)
-      #score(message)
       text = corwler.google(message)
+      f.write(text)
       # 包裝訊息
       remessage = TextSendMessage(text=text)
       # 回應使用者
@@ -173,8 +175,6 @@ def handle_message(event):
                       event.reply_token,
                       remessage)           
       
-    #def score(message):
-                  
     if re.search('新聞|news', event.message.text, re.IGNORECASE):
         news()  
         return 0 
